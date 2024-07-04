@@ -25,8 +25,8 @@ const options = {
 };
 
 // dotenv
-const dotenv = require('dotenv').config();
-const HTTPS_PORT = 443;
+const dotenv = require('dotenv');
+dotenv.config();
 
 // CSRF
 const csrf = require('csurf');
@@ -37,12 +37,12 @@ app.use(function (err, req, res, next) {
     if (err.code !== 'EBADCSRFTOKEN') { return next(err); }
     
     // CSRF 토큰 에러
-    const errorHtml = /*html*/`<title>Failed</title><h2>CSRF token validation failed. Please refresh the page and try again.</h2>`;
+    const errorHtml = /*html*/`<title>검증 실패</title><h2>CSRF 토큰 검증에 실패했습니다. 페이지를 새로고침한 후 다시 시도하세요.</h2>`;
     res.status(403).send(errorHtml);
 });
 
 // Listen
-https.createServer(options, app).listen(HTTPS_PORT, () => {
+https.createServer(options, app).listen(process.env.PORT, () => {
     console.log(`Frontend Server Ready. https://127.0.0.1`);
 });
 

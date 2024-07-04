@@ -35,6 +35,10 @@ app.use((req, res, next) => { res.cookie('XSRF-TOKEN', req.csrfToken()); next();
 app.use(function (err, req, res, next) {
     // 만일 토큰 에러가 아닌 다른 에러일경우 다른 에러처리 미들웨어로 보냅니다.
     if (err.code !== 'EBADCSRFTOKEN') { return next(err); }
+    
+    // 중복 아이디 체크는 넘어가주기
+    if (req.url == '/auth/check-id') { return next(); }
+
     // CSRF 토큰 에러
     const errorHtml = /*html*/`<title>Failed</title><h2>CSRF token validation failed. Please refresh the page and try again.</h2>`;
     res.status(403).send(errorHtml);

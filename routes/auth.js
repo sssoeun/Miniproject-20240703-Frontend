@@ -1,5 +1,4 @@
 let router = require('express').Router();
-const { validateCSRFToken } = require('../utils/validate-csrf');
 
 // 로그인 폼
 router.get('/login', function (req, res) {
@@ -11,7 +10,7 @@ router.get('/login', function (req, res) {
 });
 
 // 로그인
-router.post('/login', validateCSRFToken, async function (req, res) {
+router.post('/login', async function (req, res) {
     try {
         const response = await fetch('http://127.0.0.1:8000/auth/login', {
             method: 'POST',
@@ -27,7 +26,7 @@ router.post('/login', validateCSRFToken, async function (req, res) {
             res.cookie('uid', req.body.userid);
             return res.render('index.ejs', { user: req.session.user, data });  // 로그인 성공
         } else {
-            csrfToken = req.csrfToken();
+            const csrfToken = req.csrfToken();
             return res.render('auth/login.ejs', { data, csrfToken });  // 로그인 실패
         }
     } catch (error) {
@@ -44,7 +43,8 @@ router.get('/logout', function (req, res) {
 
 // 회원가입 폼
 router.get('/sign-up', function (req, res) {
-    res.render('auth/sign-up.ejs');
+    const csrfToken = req.csrfToken();
+    res.render('auth/sign-up.ejs', { csrfToken });
 });
 
 // 회원가입 폼에서 중복 아이디 검사
@@ -82,7 +82,8 @@ router.post('/sign-up', async function (req, res) {
             res.cookie('uid', req.body.userid);
             return res.render('index.ejs', { user: req.session.user, data });  // 회원가입 완료
         } else {
-            return res.render('auth/sign-up.ejs', { data });  // 회원가입 실패
+            const csrfToken = req.csrfToken();
+            return res.render('auth/sign-up.ejs', { data, csrfToken });  // 회원가입 실패
         }
     } catch (error) {
         console.error(error);

@@ -90,6 +90,8 @@
 
             function checkIdDuplicate() {
                 const userid = document.getElementById('form_userid').value;
+                const csrfInput = document.querySelector('input[name="_csrf"]');
+                const csrfToken = csrfInput.value;
 
                 // 아이디 길이 검사
                 if (userid.length < 4) {
@@ -101,7 +103,8 @@
                 fetch('/auth/check-id', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': csrfToken,
                         },
                         body: JSON.stringify({ userid }),
                     })

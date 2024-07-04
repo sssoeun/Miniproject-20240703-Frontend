@@ -123,14 +123,12 @@
             }
             
             function validateForm() {
-                let isValid = true;
-
                 const idInput = document.querySelector('input[name="userid"]');
                 const idError = document.getElementById('idError');
                 if (idInput.value.length < 4) {
                     idError.textContent = '아이디는 4자리 이상으로 입력해주세요.';
                     idInput.classList.add('is-invalid');
-                    isValid = false;
+                    return false;
                 } else {
                     idError.textContent = '';
                     idInput.classList.remove('is-invalid');
@@ -141,7 +139,7 @@
                 if (passwordInput.value.length < 8) {
                     passwordError.textContent = '비밀번호는 8자리 이상으로 입력해주세요.';
                     passwordInput.classList.add('is-invalid');
-                    isValid = false;
+                    return false;
                 } else {
                     passwordError.textContent = '';
                     passwordInput.classList.remove('is-invalid');
@@ -153,13 +151,13 @@
                 if (!emailRegex.test(emailInput.value)) {
                     emailError.textContent = '이메일 형식이 올바르지 않습니다.';
                     emailInput.classList.add('is-invalid');
-                    isValid = false;
+                    return false;
                 } else {
                     emailError.textContent = '';
                     emailInput.classList.remove('is-invalid');
                 }
 
-                return isValid;
+                return true;
             }
         </script>
 

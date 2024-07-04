@@ -1,17 +1,17 @@
-// express
+// Express
 const express = require('express');
 const app = express();
 app.use(express.static('public'));
 
-// session
+// Session
 const { sessionConfig } = require('./utils/session');
 app.use(sessionConfig);
 
-// cookie-parser
+// Cookie-parser
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-// body-parser
+// Body-parser
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -24,7 +24,7 @@ const options = {
     cert: fs.readFileSync('./rootca.crt')
 };
 
-// dotenv
+// Dotenv
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -46,7 +46,7 @@ https.createServer(options, app).listen(process.env.PORT, () => {
     console.log(`Frontend Server Ready. https://127.0.0.1`);
 });
 
-//// Routes
+// Routes
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/amm', require('./routes/asset-management'));

@@ -30,10 +30,9 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 // Listen
-// app.listen(PORT, function () {
-//     console.log(`Frontend Server Ready. http://127.0.0.1:${PORT}`);
-// });
-https.createServer(options, app).listen(HTTPS_PORT);
+https.createServer(options, app).listen(HTTPS_PORT, () => {
+    console.log(`Frontend Server Ready. https://127.0.0.1`);
+});
 
 //// Routes
 app.use('/', require('./routes/index'));

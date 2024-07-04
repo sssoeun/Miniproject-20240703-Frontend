@@ -138,8 +138,8 @@
 
                 const passwordInput = document.querySelector('input[name="userpw"]');
                 const passwordError = document.getElementById('passwordError');
-                if (passwordInput.value.length < 4) {
-                    passwordError.textContent = '비밀번호는 4자리 이상으로 입력해주세요.';
+                if (passwordInput.value.length < 8) {
+                    passwordError.textContent = '비밀번호는 8자리 이상으로 입력해주세요.';
                     passwordInput.classList.add('is-invalid');
                     isValid = false;
                 } else {

@@ -46,6 +46,7 @@
     <body>
         <%- include('../menu.html') %>
         <form action="/auth/login" method="post" id="loginForm" onsubmit="return validateForm()">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-container">
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">아이디</label>

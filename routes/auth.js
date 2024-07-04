@@ -1,16 +1,17 @@
 let router = require('express').Router();
+const { validateCSRFToken } = require('../utils/validate-csrf');
 
 // 로그인 폼
 router.get('/login', function (req, res) {
     if (!req.session.user) {
-        return res.render('auth/login.ejs');
+        return res.render('auth/login.ejs', { csrfToken: req.csrfToken() });
     }
     
     res.redirect('/');
 });
 
 // 로그인
-router.post('/login', async function (req, res) {
+router.post('/login', validateCSRFToken, async function (req, res) {
     try {
         const response = await fetch('http://127.0.0.1:8000/auth/login', {
             method: 'POST',
@@ -26,7 +27,8 @@ router.post('/login', async function (req, res) {
             res.cookie('uid', req.body.userid);
             return res.render('index.ejs', { user: req.session.user, data });  // 로그인 성공
         } else {
-            return res.render('auth/login.ejs', { data });  // 로그인 실패
+            csrfToken = req.csrfToken();
+            return res.render('auth/login.ejs', { data, csrfToken });  // 로그인 실패
         }
     } catch (error) {
         console.error(error);

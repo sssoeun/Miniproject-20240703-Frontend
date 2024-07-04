@@ -1,4 +1,5 @@
 let router = require('express').Router();
+const jwt = require('jsonwebtoken');
 
 // 로그인 폼
 router.get('/login', function (req, res) {
@@ -22,8 +23,10 @@ router.post('/login', async function (req, res) {
         
         const data = await response.json();
         if (response.ok) {
-            req.session.user = { userid: req.body.userid };
-            res.cookie('uid', req.body.userid);
+            const { userid } = req.body;
+            const token = jwt.sign({ userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            req.session.user = { userid, token };
+            res.cookie('uid', userid);
             return res.render('index.ejs', { user: req.session.user, data });  // 로그인 성공
         } else {
             const csrfToken = req.csrfToken();

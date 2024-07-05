@@ -23,7 +23,7 @@ router.post('/', async function (req, res) {
             return res.status(401).json({ data });
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         return res.status(500).json({ data: { answer: '챗봇 서버에 문제가 생겼습니다.' } });
     }
 });

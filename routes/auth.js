@@ -1,6 +1,81 @@
 let router = require('express').Router();
 const jwt = require('jsonwebtoken');
 
+// 회원정보 수정
+router.post('/edit', async function (req, res) {
+    if (!req.session.user) {
+        return res.render('auth/login.ejs', { csrfToken: req.csrfToken() });
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(req.body.email)) {
+        req.session.user.alertMsg = '이메일 형식이 올바르지 않습니다.';
+        return res.redirect('/auth/edit');
+    }
+    
+    if (req.body.userpw) {
+        if (req.body.userpw.length < 8) {
+            req.session.user.alertMsg = '비밀번호는 8자리 이상으로 입력해 주세요.';
+            return res.redirect('/auth/edit');
+        }
+    
+        if (req.body.userpw != req.body.userpwre) {
+            req.session.user.alertMsg = '다시 입력해 주세요.';
+            return res.redirect('/auth/edit');
+        }
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/auth/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(req.body)
+        });
+
+        const { data } = await response.json();
+        console.log(data);
+        const csrfToken = req.csrfToken();
+        return res.render('auth/edit.ejs', { data, csrfToken })
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+// 회원정보 수정 페이지
+router.get('/edit', async function (req, res) {
+    if (!req.session.user) {
+        return res.render('auth/login.ejs', { csrfToken: req.csrfToken() });
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/auth/edit-info', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userid: req.session.user.userid })
+        });
+
+        const { data } = await response.json();
+        const csrfToken = req.csrfToken();
+
+        if (req.session.user.alertMsg) {
+            data.alertMsg = req.session.user.alertMsg;
+            req.session.user.alertMsg = undefined;
+        }
+
+        if (response.ok) {
+            return res.render('auth/edit.ejs', { data, csrfToken })
+        } else {
+            return res.send('잘못된 페이지');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+});
+
 // 로그인 폼
 router.get('/login', function (req, res) {
     if (!req.session.user) {
@@ -32,8 +107,8 @@ router.post('/login', async function (req, res) {
         } else {
             return res.render('auth/login.ejs', { data, csrfToken });  // 로그인 실패
         }
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
     }
 });
 
@@ -63,8 +138,8 @@ router.post('/check-id', async function (req, res) {
         
         const data = await response.json();
         return res.json(data);
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
     }
 });
 
@@ -88,8 +163,8 @@ router.post('/sign-up', async function (req, res) {
         } else {
             return res.render('auth/sign-up.ejs', { data, csrfToken });  // 회원가입 실패
         }
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
     }
 });
 

@@ -31,6 +31,18 @@
   const uid=$.cookie('uid');
   
   if(uid) {
-    $('.check-uid').html(`<a class="btn btn-danger" href="/auth/logout" id="loginA">로그아웃</a>`);
+    // $('.check-uid').html(/*html*/`<a class="btn btn-danger" href="/auth/logout" id="loginA">로그아웃</a>`);
+    $('.check-uid').html(/*html*/`
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+      환영합니다
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/auth/edit">정보 수정</a></li>
+        <li><hr class="dropdown-divider"></hr></li>
+        <li><a class="dropdown-item" href="/auth/logout">로그아웃</a></li>
+      </ul>
+    </div>
+    `);
   }
 </script>

@@ -31,7 +31,14 @@ dotenv.config();
 // CSRF
 const csrf = require('csurf');
 app.use(csrf());
-app.use((req, res, next) => { res.cookie('XSRF-TOKEN', req.csrfToken()); next(); });
+app.use((req, res, next) => {
+    if (!req.session.user) {
+        res.clearCookie('uid', { path: '/' });
+    }
+
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    next(); 
+});
 app.use(function (err, req, res, next) {
     // 만일 토큰 에러가 아닌 다른 에러일경우 다른 에러처리 미들웨어로 보냅니다.
     if (err.code !== 'EBADCSRFTOKEN') { return next(err); }

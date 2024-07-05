@@ -8,7 +8,8 @@ router.get('/', verifyToken, async (req, res) => {
             res.clearCookie('uid', { path: '/' });
         }
 
-        res.render('index.ejs', { user: req.session.user });
+        const csrfToken = req.csrfToken();
+        res.render('index.ejs', { user: req.session.user, csrfToken });
     } catch (err) {
         res.status(500).send('DB Fail.');
     }

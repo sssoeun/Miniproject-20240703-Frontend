@@ -22,14 +22,14 @@ router.post('/login', async function (req, res) {
         });
         
         const data = await response.json();
+        const csrfToken = req.csrfToken();
         if (response.ok) {
             const { userid } = req.body;
             const token = jwt.sign({ userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
             req.session.user = { userid, token };
             res.cookie('uid', userid);
-            return res.render('index.ejs', { user: req.session.user, data });  // 로그인 성공
+            return res.render('index.ejs', { user: req.session.user, data, csrfToken });  // 로그인 성공
         } else {
-            const csrfToken = req.csrfToken();
             return res.render('auth/login.ejs', { data, csrfToken });  // 로그인 실패
         }
     } catch (error) {
@@ -80,12 +80,12 @@ router.post('/sign-up', async function (req, res) {
         });
 
         const data = await response.json();
+        const csrfToken = req.csrfToken();
         if (response.ok) {
             req.session.user = { userid: req.body.userid };
             res.cookie('uid', req.body.userid);
-            return res.render('index.ejs', { user: req.session.user, data });  // 회원가입 완료
+            return res.render('index.ejs', { user: req.session.user, data, csrfToken });  // 회원가입 완료
         } else {
-            const csrfToken = req.csrfToken();
             return res.render('auth/sign-up.ejs', { data, csrfToken });  // 회원가입 실패
         }
     } catch (error) {

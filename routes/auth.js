@@ -1,6 +1,69 @@
 let router = require('express').Router();
 const jwt = require('jsonwebtoken');
 
+// 회원탈퇴
+router.post('/delete', async function (req, res) {
+    if (!req.session.user) {
+        return res.render('auth/login.ejs', { csrfToken: req.csrfToken() });
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/auth/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userid: req.session.user.userid })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            req.session.destroy();
+            res.clearCookie('uid', { path: '/' });
+            return res.render('index.ejs', { data });
+        } else {
+            // 회원탈퇴 실패
+            return res.redirect('/auth/me');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+// 마이페이지
+router.get('/me', async function (req, res) {
+    if (!req.session.user) {
+        return res.render('auth/login.ejs', { csrfToken: req.csrfToken() });
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/auth/edit-info', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userid: req.session.user.userid })
+        });
+
+        const { data } = await response.json();
+        const csrfToken = req.csrfToken();
+
+        if (req.session.user.alertMsg) {
+            data.alertMsg = req.session.user.alertMsg;
+            req.session.user.alertMsg = undefined;
+        }
+
+        if (response.ok) {
+            return res.render('auth/me.ejs', { data, csrfToken })
+        } else {
+            return res.send('잘못된 페이지');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+});
+
 // 회원정보 수정
 router.post('/edit', async function (req, res) {
     if (!req.session.user) {
@@ -37,7 +100,7 @@ router.post('/edit', async function (req, res) {
         const { data } = await response.json();
         console.log(data);
         const csrfToken = req.csrfToken();
-        return res.render('auth/edit.ejs', { data, csrfToken })
+        return res.render('auth/edit.ejs', { data, csrfToken });
     } catch (err) {
         console.error(err);
     }

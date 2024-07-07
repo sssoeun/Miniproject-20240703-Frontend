@@ -29,6 +29,16 @@ app.use(sessionConfig);
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+// node-cache 설정
+const NodeCache = require('node-cache');
+const transactionCache = new NodeCache({ stdTTL: 600, checkperiod: 120 });
+
+// transactionCache를 req 객체에 추가하는 미들웨어
+app.use((req, res, next) => {
+    req.transactionCache = transactionCache;
+    next();
+});
+
 // Listen
 https.createServer(options, app).listen(HTTPS_PORT, () => {
     console.log(`Frontend Server Ready. https://127.0.0.1`);

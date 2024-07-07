@@ -5,7 +5,7 @@ router.get('/login', function (req, res) {
     if (!req.session.user) {
         return res.render('auth/login.ejs');
     }
-    
+
     res.redirect('/');
 });
 
@@ -19,7 +19,7 @@ router.post('/login', async function (req, res) {
             },
             body: JSON.stringify(req.body)
         });
-        
+
         const data = await response.json();
         if (response.ok) {
             req.session.user = { userid: req.body.userid };
@@ -35,6 +35,10 @@ router.post('/login', async function (req, res) {
 
 // 로그아웃
 router.get('/logout', function (req, res) {
+    // 캐시된 거래 내역 삭제
+    if (req.session.user && req.session.user.userid) {
+        req.transactionCache.del(req.session.user.userid);
+    }
     req.session.destroy();
     res.clearCookie('uid', { path: '/' });
     res.redirect('/');
@@ -55,7 +59,7 @@ router.post('/check-id', async function (req, res) {
             },
             body: JSON.stringify(req.body)
         });
-        
+
         const data = await response.json();
         return res.json(data);
     } catch (error) {

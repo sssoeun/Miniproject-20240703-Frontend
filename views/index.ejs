@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+<<<<<<< HEAD
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <% if (typeof csrfToken != 'undefined' && csrfToken) {%>
@@ -95,6 +96,14 @@
       word-wrap: break-word;
     }
   </style>
+=======
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Miniproject</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"></script>
+>>>>>>> ESJW
 </head>
 
 <body>
@@ -116,6 +125,7 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
     </div>
     <% } else { %>
     <div class="row justify-content-center">
@@ -125,11 +135,28 @@
             <h3 class="card-title">Miniproject</h3>
             <a href="/auth/login" class="btn btn-warning btn-block login">로그인</a>
             <a href="/auth/sign-up" class="btn btn-success btn-block signup">회원가입</a>
+=======
+      <% } else { %>
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body text-center">
+              <h3 class="card-title">Miniproject</h3>
+              <a href="/auth/login" class="btn btn-warning btn-block login">로그인</a>
+              <a href="/auth/sign-up" class="btn btn-success btn-block signup">회원가입</a>
+              <p></p>
+              <!-- 네아로 버튼 -->
+              <a id="naver-login-btn" href="#">
+                <img height="50" src="http://static.nid.naver.com/oauth/small_g_in.PNG" alt="Naver Login"/>
+              </a>
+            </div>
+>>>>>>> ESJW
           </div>
         </div>
       </div>
     </div>
     <% } %>
+<<<<<<< HEAD
   </section>
 
   <div class="chat-button" id="chat-button">
@@ -229,5 +256,20 @@
   integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
   crossorigin="anonymous"></script>
 </body>
+=======
+    
+    <% if(typeof api_url != 'undefined') { %>
+    <script>
+      document.getElementById('naver-login-btn').addEventListener('click', function(event) {
+          document.getElementById('naver-login-btn').href = '<%= api_url %>';
+      });
+    </script>
+    <% } %>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+>>>>>>> ESJW
+
+</body>
 </html>

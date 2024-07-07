@@ -100,8 +100,8 @@ router.post('/edit', async function (req, res) {
         });
 
         const { data } = await response.json();
-        console.log(data);
         const csrfToken = req.csrfToken();
+        data.birthday = formatDateString(data.birthday);
         return res.render('auth/edit.ejs', { data, csrfToken });
     } catch (err) {
         console.error(err);

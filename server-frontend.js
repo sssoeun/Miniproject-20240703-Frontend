@@ -43,7 +43,7 @@ app.use(function (err, req, res, next) {
 
 // Listen
 https.createServer(options, app).listen(process.env.PORT, () => {
-    console.log(`Frontend Server Ready. https://127.0.0.1`);
+    console.log(`Frontend Server Ready. https://127.0.0.1:${process.env.PORT}`);
 });
 
 //// Routes
@@ -51,3 +51,4 @@ app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/amm', require('./routes/asset-management'));
 app.use('/real-estate', require('./routes/real-estate'));
+app.use('/naverlogin', require('./routes/naverlogin'));

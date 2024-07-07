@@ -209,6 +209,24 @@ router.post('/check-id', async function (req, res) {
     }
 });
 
+// 회원가입 폼에서 중복 이메일 검사
+router.post('/check-email', async function (req, res) {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/auth/check-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(req.body)
+        });
+        
+        const data = await response.json();
+        return res.json(data);
+    } catch (err) {
+        console.error(err);
+    }
+});
+
 // 회원가입 - 유저 등록
 router.post('/sign-up', async function (req, res) {
     try {

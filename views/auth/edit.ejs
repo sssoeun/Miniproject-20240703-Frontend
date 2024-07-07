@@ -48,6 +48,11 @@
     .btn-custom:hover {
       background-color: #0056b3;
     }
+    
+    input[readonly] {
+      background-color: #f5f5f5;
+      border-color: #ccc;
+    }
   </style>
 </head>
 
@@ -61,11 +66,15 @@
         <input name="userid" value="<%= data.userid %>" type="text" class="form-control" id="formUserId" readonly>
       </div>
       <div class="mb-3">
+          <label class="form-label">생년월일</label>
+          <input value="<%= data.birthday %>" type="date" class="form-control" id="formUserBirthday" readonly>
+      </div>
+      <div class="mb-3">
         <label class="form-label">이메일</label>
         <input name="email" value="<%= data.email %>" type="text" class="form-control" id="formUserEmail">
       </div>
       <div class="mb-3">
-        <label class="form-label">비밀번호 (변경을 원하시면 입력해주세요.)</label>
+        <label class="form-label">비밀번호<br>(변경을 원하시면 입력해주세요.)</label>
         <input name="userpw" type="password" class="form-control" id="formUserPw">
       </div>
       <div class="mb-3">

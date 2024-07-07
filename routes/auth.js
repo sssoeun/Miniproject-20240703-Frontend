@@ -1,5 +1,6 @@
 let router = require('express').Router();
 const jwt = require('jsonwebtoken');
+const { formatDateString } = require('../utils/format');
 
 // 회원탈퇴
 router.post('/delete', async function (req, res) {
@@ -55,6 +56,7 @@ router.get('/me', async function (req, res) {
         }
 
         if (response.ok) {
+            data.birthday = formatDateString(data.birthday);
             return res.render('auth/me.ejs', { data, csrfToken })
         } else {
             return res.send('잘못된 페이지');
@@ -130,6 +132,7 @@ router.get('/edit', async function (req, res) {
         }
 
         if (response.ok) {
+            data.birthday = formatDateString(data.birthday);
             return res.render('auth/edit.ejs', { data, csrfToken })
         } else {
             return res.send('잘못된 페이지');

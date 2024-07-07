@@ -58,8 +58,5 @@ app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/amm', require('./routes/asset-management'));
 app.use('/real-estate', require('./routes/real-estate'));
-<<<<<<< HEAD
 app.use('/chatbot', require('./routes/chatbot'));
-=======
 app.use('/naverlogin', require('./routes/naverlogin'));
->>>>>>> ESJW

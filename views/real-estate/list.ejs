@@ -4,23 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <% if (typeof csrfToken != 'undefined' && csrfToken) {%>
-    <meta name="csrf-token" content="<%= csrfToken %>">
-    <% } %>
-    <title>부동산 매물</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <style>
-        .bAddr {
-            max-height: 200px;
-            padding: 20px;
-        }
+    <% if (typeof csrfToken !='undefined' && csrfToken) {%>
+        <meta name="csrf-token" content="<%= csrfToken %>">
+        <% } %>
+            <title>부동산 매물</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+                crossorigin="anonymous">
+            <style>
+                .bAddr {
+                    max-height: 200px;
+                    padding: 20px;
+                }
 
-        .bAddr>div {
-            margin-bottom: 20px;
-            /* 각 주소 정보 사이에 여백 추가 */
-        }
-    </style>
+                .bAddr>div {
+                    margin-bottom: 20px;
+                    /* 각 주소 정보 사이에 여백 추가 */
+                }
+            </style>
 </head>
 
 <body>
@@ -28,19 +29,17 @@
         <p></p>
         <form action="/real-estate/search">
             <div class="container input-group m1-2 my-3">
-                <div class="input-group-prepend">
-                    <select class="custom-select option-select" name="selectv">
+                <div class="input-group-prepend ">
+                    <select class="custom-select option-select form-select" name="selectv">
                         <option value="id" name="id">매물번호</option>
                         <option value="user_id" name="user_id">사용자 ID</option>
                         <option value="address" name="address">주소</option>
-                        <option value="apartment" name="apartment">아파트이름</option>
-                        <option value="city" name="city">도시</option>
-                        <option value="area" name="area">지역</option>
+                        <option value="area" name="area">면적</option>
                     </select>
                 </div>
-                <input class="form-control sword" name="sword" type="search" placeholder="검색어 입력">
-                <div class="input-group-append">
-                    <button class="btn btn-success sbtn">검색하기</button>
+                <input class="form-control sword ms-3" name="sword" type="search" placeholder="검색어 입력">
+                <div class="input-group-append ms-3">
+                    <button class="btn btn-primary sbtn">검색하기</button>
                 </div>
             </div>
         </form>
@@ -52,7 +51,7 @@
                     <tr>
                         <th>매물번호</th>
                         <th>주소</th>
-                        <th>면적</th>
+                        <th>면적<span style="font-size: 12px;">(평)</span></th>
                         <th>매매가격</th>
                         <th>전세가격</th>
                         <th>등록일</th>
@@ -73,16 +72,16 @@
                                 </a>
                             </td>
                             <td>
-                                <%= data[i].area %>
+                                <%= data[i].area %>평
+                            </td>
+                            <td data-price="<%= data[i].selling_price %>">
+                                <%= data[i].selling_price %>원
+                            </td>
+                            <td data-price="<%= data[i].jeonse_price %>">
+                                <%= data[i].jeonse_price %>원
                             </td>
                             <td>
-                                <%= data[i].selling_price %>
-                            </td>
-                            <td>
-                                <%= data[i].jeonse_price %>
-                            </td>
-                            <td>
-                                <%= data[i].created_at %>
+                                <%= data[i].created_at.replace('T', ' ' ).replace('.000Z', '' ) %>
                             </td>
                             <td>
                                 <%= data[i].status %>
@@ -91,50 +90,59 @@
                                 <button class="delete btn btn-outline-danger" data-id="<%= data[i].id %>">삭제</button>
                             </td>
                         </tr>
-                    <% } %>
-                    <% if (typeof data != 'undefined' && data.real_estate) { %>
-                        <% for(let i=0; i < data.real_estate.length; i++){ %>
-                            <tr>
-                                <td>
-                                    <%= data.real_estate[i].id %>
-                                </td>
-                                <td>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#myModal"
-                                        onclick="modal_content(`<%= data.real_estate[i].id %>`,`<%= data.real_estate[i].user_id %>`,`<%= data.real_estate[i].apartment %>`,`<%= data.real_estate[i].address %>`,`<%= data.real_estate[i].city %>`,`<%= data.real_estate[i].area %>`,`<%= data.real_estate[i].imagepath %>`,`<%= data.real_estate[i].selling_price %>`,`<%= data.real_estate[i].jeonse_price %>`,`<%= data.real_estate[i].status %>`)">
-                                        <%= data.real_estate[i].address %>
-                                    </a>
-                                </td>
-                                <td>
-                                    <%= data.real_estate[i].area %>
-                                </td>
-                                <td>
-                                    <%= data.real_estate[i].selling_price %>
-                                </td>
-                                <td>
-                                    <%= data.real_estate[i].jeonse_price %>
-                                </td>
-                                <td>
-                                    <%= data.real_estate[i].created_at %>
-                                </td>
-                                <td>
-                                    <%= data.real_estate[i].status %>
-                                </td>
-                                <td>
-                                    <button class="delete btn btn-outline-danger" data-id="<%= data.real_estate[i].id %>">삭제</button>
-                                </td>
-                            </tr>
                         <% } %>
-                    <% } %>
+                            <% if (typeof data !='undefined' && data.real_estate) { %>
+                                <% for(let i=0; i < data.real_estate.length; i++){ %>
+                                    <tr>
+                                        <td>
+                                            <%= data.real_estate[i].id %>
+                                        </td>
+                                        <td>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#myModal"
+                                                onclick="modal_content(`<%= data.real_estate[i].id %>`,`<%= data.real_estate[i].user_id %>`,`<%= data.real_estate[i].apartment %>`,`<%= data.real_estate[i].address %>`,`<%= data.real_estate[i].city %>`,`<%= data.real_estate[i].area %>`,`<%= data.real_estate[i].imagepath %>`,`<%= data.real_estate[i].selling_price %>`,`<%= data.real_estate[i].jeonse_price %>`,`<%= data.real_estate[i].status %>`)">
+                                                <%= data.real_estate[i].address %>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <%= data.real_estate[i].area %>
+                                        </td>
+                                        <td>
+                                            <%= data.real_estate[i].selling_price %>
+                                        </td>
+                                        <td>
+                                            <%= data.real_estate[i].jeonse_price %>
+                                        </td>
+                                        <td>
+                                            <%= data.real_estate[i].created_at %>
+                                        </td>
+                                        <td>
+                                            <%= data.real_estate[i].status %>
+                                        </td>
+                                        <td>
+                                            <button class="delete btn btn-outline-danger"
+                                                data-id="<%= data.real_estate[i].id %>">삭제</button>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                        <% } %>
                 </tbody>
             </table>
-            <div class="container d-flex justify-content-center">
-                <a href="/real-estate/enter" class="btn btn-primary ms-2"
-                    style="background-color: #5cb874; border: none;">등록하기</a>
-            </div>
-            <div style="margin-top: 13px;">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination container d-flex justify-content-center"></ul>
-                </nav>
+            <div class="container d-flex justify-content-between align-items-center" style="margin-top: 13px;">
+                <!-- 빈 div로 flexbox 공간을 확보 -->
+                <div class="flex-grow-1 d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination m-0">
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                                    <a class="page-link" href="/real-estate?page=<%= i %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+                        </ul>
+                    </nav>
+                </div>
+                <a href="/real-estate/enter" class="btn btn-primary" style="border: none;">등록하기</a>
             </div>
         </div>
         <% if (typeof data !='undefined' && data.alertMsg) { %>
@@ -155,14 +163,6 @@
                             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=aef6f148161669e918ab8349087da0a4&libraries=services"></script>
 
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-                        <!-- <script>
-                            $('.sbtn').click(() => {
-                                let inputValue = $('.sword').val();
-                                location.href = '\\real-estate/search?value=' + inputValue;
-                            })
-                        </script> -->
-
 
                         <script>
                             $(document).ready(function () {
@@ -281,7 +281,7 @@
                                 $("#realId").html(`<span>${id}</span>`);
                                 $("#realHiddenId").html(`<input type="hidden" name="id" value="${id}">`);
                                 $("#realUser_id").html(`<span>${user_id}</span>`);
-                                $('#realApartment').html(`<div class="row"><div class="mb-3 col-md-5"><input class="form-control" type='text' name='apartment' value='${apartment}'></div><div class="mb-3 col-md-5"><button type="button" class="btn btn-primary" onclick="addressSearch()" style="background-color: #5cb874; border: none;">주소 검색</button></div></div>`);
+                                $('#realApartment').html(`<div class="row"><div class="mb-3 col-md-5"><input class="form-control" type='text' name='apartment' value='${apartment}'></div><div class="mb-3 col-md-5"><button type="button" class="btn btn-primary" onclick="addressSearch()">주소 검색</button></div></div>`);
                                 $('#realAddress').html(`<input class="form-control" type='text' name='address' value='${address}'>`);
                                 $('#realCity').html(`<input class="form-control" type='text' name='city' value='${city}'>`);
                                 $("#realArea").html(`<input class="form-control" type='text' name='area' value='${area}'>`);
@@ -464,16 +464,22 @@
                                         <!-- Modal body -->
                                         <div class="modal-body">
 
-                                            <div>판매자 ID : <span id="realUser_id" name="user_id"></span></div>
-                                            <div>주소 : <span id="realAddress" name="address"></span><span name="city"
-                                                    id="realCity"></span><span id="realApartment"
-                                                    name="apartment"></span></div>
-                                            <div>면적 : <span id="realArea"></span></div>
-                                            <div id="map" style="width:100%; height:500px;"></div>
-                                            <div>첨부이미지 : <span id="realImg" name="imagepath"></span></div>
+                                            <div><span style="font-weight: bold;"> 판매자 ID : </span><span
+                                                    id="realUser_id" name="user_id"></span></div>
+                                            <div><span style="font-weight: bold;"> 주소 : </span><span id="realAddress"
+                                                    name="address"></span><span name="city" id="realCity"></span><span
+                                                    id="realApartment" name="apartment"></span></div>
+                                            <div><span style="font-weight: bold;"> 면적 : </span><span
+                                                    id="realArea"></span>평</div>
+                                            <div><span style="font-weight: bold;"> 매매 가격 : </span><span
+                                                    id="realselling_price" name="selling_price"></span></div>
+                                            <div><span style="font-weight: bold;"> 전세 가격 : </span><span
+                                                    id="realJeonse_price"></span></div>
+                                            <div id="map" style="width:100%; height:500px; border: solid 1px;"></div>
+                                            <div id="imageContainer">
+                                                <span id="realImg" name="imagepath"></span>
+                                            </div>
 
-                                            <div>매매 가격 : <span id="realselling_price" name="selling_price"></span></div>
-                                            <div>전세 가격 : <span id="realJeonse_price"></span></div>
                                         </div>
 
                                         <!-- Modal footer -->
@@ -492,6 +498,16 @@
                                 </div>
                             </div>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var priceElements = document.querySelectorAll('[data-price]');
+
+                                priceElements.forEach(function (element) {
+                                    var price = parseFloat(element.getAttribute('data-price'));
+                                    element.textContent = price.toLocaleString() + '원';
+                                });
+                            });
+                        </script>
 </body>
 
 </html>

@@ -3,23 +3,15 @@ const multer = require('multer');
 const fs = require('fs'); // fs.existsSync와 fs.mkdirSync를 사용하여 경로가 없을 때만 폴더를 생성합니다.
 const path = require('path');
 
-router.get('/session-info', (req, res) => {
-    console.log("req : " + req.session.user.userid);
-    if (req.session.user) {
-        res.json({ userid: req.session.user.userid }); // 세션에 저장된 사용자 정보 중 필요한 것을 반환
-    } else {
-        res.status(401).json({ error: '세션에 사용자 정보가 없습니다.' });
-    }
-});
 
 // 리스트 검색
 router.get('/search', async function (req, res) {
     let req_sword = encodeURIComponent(req.query.sword);
     let req_selectv = req.query.selectv;
-    console.log("1 : " + req_sword);
-    console.log("2 : " + req_selectv);
+    let page = req.query.page || 1;
+    let itemsPerPage = req.query.itemsPerPage || 10;
     try {
-        const response = await fetch(`http://127.0.0.1:8000/real-estate/search?selectv=${req_selectv}&sword=${encodeURIComponent(req_sword)}`, {
+        const response = await fetch(`http://127.0.0.1:8000/real-estate/search?selectv=${req_selectv}&sword=${encodeURIComponent(req_sword)}&page=${page}&itemsPerPage=${itemsPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,10 +21,9 @@ router.get('/search', async function (req, res) {
             },
         });
         const data = await response.json();
-        console.log(data);
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
         const csrfToken = req.csrfToken();
-        return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
+        return res.render('real-estate/list.ejs', { data: data.real_estate, totalPages: data.totalPages, currentPage: data.currentPage, user: req.session.user, csrfToken });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -44,12 +35,15 @@ router.get('/search', async function (req, res) {
 
 // 부동산 매물 목록
 router.get('/', async function (req, res) {
+    let page = req.query.page || 1;
+    let itemsPerPage = req.query.itemsPerPage || 10;
+
     if (!req.session.user) {
         return res.render('auth/login.ejs', { csrfToken: req.csrfToken() });
     }
-    
+
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate', {
+        const response = await fetch(`http://127.0.0.1:8000/real-estate?page=${page}&itemsPerPage=${itemsPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,10 +51,11 @@ router.get('/', async function (req, res) {
             },
         });
         const data = await response.json();
+        console.log(data);
 
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
         const csrfToken = req.csrfToken();
-        return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
+        return res.render('real-estate/list.ejs', { data: data.real_estate, totalPages: data.totalPages, currentPage: data.currentPage, user: req.session.user, csrfToken });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -123,7 +118,7 @@ router.post('/save', async function (req, res) {
             return res.redirect('/real-estate/?alertMsg=매물 등록이 완료되었습니다.');
         } else {
             const csrfToken = req.csrfToken();
-            return res.render('real-estate/enter.ejs', { user: req.session.user, data, csrfToken });
+            return res.render('real-estate/enter.ejs', { data, user: req.session.user, csrfToken });
         }
     } catch (error) {
         console.error(error);
@@ -154,7 +149,7 @@ router.post('/edit', async function (req, res) {
         if (response.ok) {
             return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
         } else {
-            return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
+            return res.render('real-estate/list.ejs', { data, user: req.session.user, csrfToken });
         }
     } catch (error) {
         console.error(error);

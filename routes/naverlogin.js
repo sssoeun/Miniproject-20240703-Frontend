@@ -51,8 +51,9 @@ router.get('/login', async function (req, res) {
             const userCheckResult = await checkUserResponse.json();
 
             if (userCheckResult.length > 0) { // 로그인
+              const nickname = userCheckResult[0].nickname;
               const token = jwt.sign({ userid: userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
-              req.session.user = { userid: userid, token };
+              req.session.user = { userid: userid, token, nickname };
               res.cookie('uid', userid);
               return res.render('index.ejs', { user: req.session.user});
             } else {  // 회원가입

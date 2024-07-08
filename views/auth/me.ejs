@@ -75,6 +75,11 @@
             <input name="email" value="<%= data.email %>" type="text" class="form-control" id="formUserEmail"
                 readonly>
         </div>
+        <div class="mb-3">
+            <label class="form-label">별명(또는 실명)</label>
+            <input name="nickname" value="<%= data.nickname %>" type="text" class="form-control" id="formUserEmail"
+                readonly>
+        </div>
         <a href="/auth/edit" class="btn btn-primary">수정</a>
         <button type="button" class="btn btn-danger" onclick="confirmDelete()">회원 탈퇴</button>
     </div>

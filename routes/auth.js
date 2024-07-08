@@ -90,6 +90,11 @@ router.post('/edit', async function (req, res) {
         }
     }
 
+    if (!req.body.nickname) {
+        req.session.user.alertMsg = '닉네임은 한 글자 이상으로 입력해 주세요.';
+            return res.redirect('/auth/edit');
+    }
+
     try {
         const response = await fetch('http://127.0.0.1:8000/auth/edit', {
             method: 'POST',
@@ -102,6 +107,8 @@ router.post('/edit', async function (req, res) {
         const { data } = await response.json();
         const csrfToken = req.csrfToken();
         data.birthday = formatDateString(data.birthday);
+
+        req.session.user.nickname = data.nickname;
         return res.render('auth/edit.ejs', { data, csrfToken });
     } catch (err) {
         console.error(err);
@@ -167,7 +174,7 @@ router.post('/login', async function (req, res) {
         if (response.ok) {
             const { userid } = req.body;
             const token = jwt.sign({ userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            req.session.user = { userid, token };
+            req.session.user = { userid, token, nickname: data.nickname };
             res.cookie('uid', userid);
             return res.render('index.ejs', { user: req.session.user, data, csrfToken });  // 로그인 성공
         } else {
@@ -246,7 +253,7 @@ router.post('/sign-up', async function (req, res) {
         const data = await response.json();
         const csrfToken = req.csrfToken();
         if (response.ok) {
-            req.session.user = { userid: req.body.userid };
+            req.session.user = { userid: req.body.userid, nickname: '고객' };
             res.cookie('uid', req.body.userid);
             return res.render('index.ejs', { user: req.session.user, data, csrfToken });  // 회원가입 완료
         } else {

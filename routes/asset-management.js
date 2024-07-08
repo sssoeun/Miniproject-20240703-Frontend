@@ -4,9 +4,7 @@ let router = require('express').Router();
 // 자산관리 메인 페이지
 router.get('/', async function (req, res) {
     if (!req.session.user) {
-        if (!req.session.user) {
-            return res.status(401).json({ message: '로그인이 필요합니다' });
-        }
+        return res.status(401).json({ message: '로그인이 필요합니다' });
     }
 
     const csrfToken = req.csrfToken();

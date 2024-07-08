@@ -50,8 +50,9 @@ app.use(function (err, req, res, next) {
     if (err.code !== 'EBADCSRFTOKEN') { return next(err); }
     
     // CSRF 토큰 에러
-    const errorHtml = /*html*/`<title>검증 실패</title><h2>CSRF 토큰 검증에 실패했습니다. 페이지를 새로고침한 후 다시 시도하세요.</h2>`;
-    res.status(403).send(errorHtml);
+    // const errorHtml = /*html*/`<title>검증 실패</title><h2>CSRF 토큰 검증에 실패했습니다. 페이지를 새로고침한 후 다시 시도하세요.</h2>`;
+    // res.status(403).send(errorHtml);
+    next();
 });
 
 // Listen

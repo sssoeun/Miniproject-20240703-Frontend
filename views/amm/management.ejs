@@ -71,6 +71,7 @@
                             </div>
                             <div class="modal-body">
                                 <form>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <div class="mb-3">
                                         <label for="account-alias" class="col-form-label">계좌 별명</label>
                                         <input type="text" class="form-control" id="account-alias"
@@ -114,6 +115,7 @@
                     </div>
                     <div class="modal-body">
                         <form>
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="mb-3">
                                 <label for="my-account" class="col-form-label">내 계좌</label>
                                 <select class="form-select" id="my-account"></select>
@@ -154,6 +156,7 @@
                     </div>
                     <div class="modal-body">
                         <form>
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="mb-3">
                                 <label for="sender-account" class="col-form-label">내 계좌</label>
                                 <select class="form-select" id="sender-account"></select>
@@ -197,6 +200,7 @@
                     </div>
                     <div class="modal-body">
                         <form>
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="mb-3">
                                 <select class="form-select" id="exchange-account"></select>
                                 </select>
@@ -398,6 +402,9 @@
 
                 // 계좌 개설 버튼
                 $('.createAccount').click(async function () {
+                    const csrfInput = document.querySelector('input[name="_csrf"]');
+                    const csrfToken = csrfInput.value;
+
                     const accountAlias = $('#account-alias').val();
                     const initialDeposit = $('#initial-deposit').val();
                     const accountpw = $('#accountPw').val();
@@ -423,6 +430,7 @@
                                 initialDeposit,
                                 accountpw,
                                 accountpwCheck,
+                                csrfToken,
                             })
                         });
 

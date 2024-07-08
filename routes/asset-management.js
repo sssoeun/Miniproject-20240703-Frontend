@@ -8,7 +8,9 @@ router.get('/', async function (req, res) {
             return res.status(401).json({ message: '로그인이 필요합니다' });
         }
     }
-    res.render('amm/management.ejs');
+
+    const csrfToken = req.csrfToken();
+    res.render('amm/management.ejs', { csrfToken });
 });
 
 // 자산관리 사용자 계좌 정보 불러오기
@@ -128,6 +130,7 @@ router.get('/account-balance/:accountNumber', async function (req, res) {
 // 자산관리 계좌 개설
 router.post('/create', async function (req, res) {
     try {
+        console.log('/amm/create test');
         const response = await fetch('http://127.0.0.1:8000/amm/create', {
             method: 'POST',
             headers: {
@@ -135,7 +138,6 @@ router.post('/create', async function (req, res) {
                 'User-Id': req.session.user.userid
             },
             body: JSON.stringify({ ...req.body })
-
         });
         const data = await response.json();
         if (response.ok) {

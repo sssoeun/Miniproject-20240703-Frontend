@@ -28,10 +28,29 @@ const options = {
 const dotenv = require('dotenv');
 dotenv.config();
 
+// body-parser
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// session
+const { sessionConfig } = require('./utils/session');
+app.use(sessionConfig);
+
+// cookie-parser
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+// node-cache 설정
+const NodeCache = require('node-cache');
+const transactionCache = new NodeCache({ stdTTL: 600, checkperiod: 120 });
+
 // CSRF
 const csrf = require('csurf');
 app.use(csrf());
 app.use((req, res, next) => {
+    req.transactionCache = transactionCache;
+
     if (!req.session.user) {
         res.clearCookie('uid', { path: '/' });
     }

@@ -222,10 +222,9 @@
                                             $("#realCity").text(`${modalData.city}`);
                                             $("#realArea").text(`${modalData.area}`);
                                             $("#realImg").html(`<div style="margin:20px"><img width='430px' height="300px" src='/image/${modalData.imagepath}'></div>`);
-                                            $("#realselling_price").text(`${modalData.selling_price}`);
-                                            $("#realJeonse_price").text(`${modalData.jeonse_price}`);
+                                            $("#realselling_price").text(`${parseFloat(modalData.selling_price).toLocaleString()}`);
+                                            $("#realJeonse_price").text(`${parseFloat(modalData.jeonse_price).toLocaleString()}`);
                                             $("#realFullAddress").text(sumAddress);
-                                            $("#hidStatus").text(modalData.status);
                                             // 구매하기 버튼 숨기기
                                             $('#buySpan').html(`<button type="button" class="btn btn-primary d-none" onclick="buyBtn()">구매하기</button>`);
                                             // 수정하러가기 버튼 숨기기
@@ -244,10 +243,9 @@
                                             $("#realCity").text(`${modalData.city}`);
                                             $("#realArea").text(`${modalData.area}`);
                                             $("#realImg").html(`<div style="margin:20px"><img width='430px' height="300px" src='/image/${modalData.imagepath}'></div>`);
-                                            $("#realselling_price").text(`${modalData.selling_price}`);
-                                            $("#realJeonse_price").text(`${modalData.jeonse_price}`);
+                                            $("#realselling_price").text(`${parseFloat(modalData.selling_price).toLocaleString()}`);
+                                            $("#realJeonse_price").text(`${parseFloat(modalData.jeonse_price).toLocaleString()}`);
                                             $("#realFullAddress").text(sumAddress);
-                                            $("#hidStatus").text(modalData.status)
 
                                             // 모달이 열릴 때마다 지도 초기화
                                             initMap(modalData.lat, modalData.lng);
@@ -264,7 +262,18 @@
                                     }
                                 });
                             }
+                            $.ajax({
+                                type: 'POST',
+                                url: 'http://127.0.0.1:8000/real-estate/', // 서버 측 엔드포인트 경로
+                                data: { id: id },
+                                success: function (response) {
 
+                                },
+                                error: function (xhr, textStatus, err) {
+                                    console.error('인증실패', err);
+                                    alert('본인만 수정 가능합니다.');
+                                }
+                            });
 
                             function editDisplay() {
                                 var id = $("#realId").text();
@@ -281,10 +290,13 @@
                                 $("#realId").html(`<span>${id}</span>`);
                                 $("#realHiddenId").html(`<input type="hidden" name="id" value="${id}">`);
                                 $("#realUser_id").html(`<span>${user_id}</span>`);
-                                $('#realApartment').html(`<div class="row"><div class="mb-3 col-md-5"><input class="form-control" type='text' name='apartment' value='${apartment}'></div><div class="mb-3 col-md-5"><button type="button" class="btn btn-primary" onclick="addressSearch()">주소 검색</button></div></div>`);
-                                $('#realAddress').html(`<input class="form-control" type='text' name='address' value='${address}'>`);
-                                $('#realCity').html(`<input class="form-control" type='text' name='city' value='${city}'>`);
-                                $("#realArea").html(`<input class="form-control" type='text' name='area' value='${area}'>`);
+                                $('#realApartment').html(`<span name='apartment''>${apartment}</span>`);
+                                $("#hidrealApartment").html(`<input type="hidden" name="apartment" value="${apartment}">`);
+                                $('#realAddress').html(`<span name='address'>${address}</span>`);
+                                $("#hidrealAddress").html(`<input type="hidden" name="address" value="${address}">`);
+                                $('#realCity').html(`<br><span name='city'>${city}</span>`);
+                                $("#hidrealCity").html(`<input type="hidden" name="city" value="${city}">`);
+                                $("#realArea").html(`<div class="row"><div class="mb-3 col-md-5"><input class="form-control" type='text' name='area' value='${area}'></div></div>`);
                                 if (imagepath) {
                                     $("#realImg").html(`
         <div id="imageContainer" style="position: relative; margin: 20px;">
@@ -295,8 +307,9 @@
                                 } else {
                                     $("#realImg").html(`<input class="form-control" type='file' name='imagepath'>`);
                                 }
-                                $("#realselling_price").html(`<div class="row"><div class="mb-3 col-md-7"><input class="form-control" type='text' name='selling_price' value='${selling_price}'></div>원</div>`);
-                                $("#realJeonse_price").html(`<div class="row"><div class="mb-3 col-md-7"><input class="form-control" type='text' name='jeonse_price' value='${jeonse_price}'></div>원</div>`);
+
+                                $("#realselling_price").html(`<div class="row"><div class="mb-3 col-md-5"><input class="form-control " type='text' name='selling_price' value='${selling_price}'></div></div>`);
+                                $("#realJeonse_price").html(`<div class="row"><div class="mb-3 col-md-5"><input class="form-control" type='text' name='jeonse_price' value='${jeonse_price}'></div></div>`);
 
                                 // 수정 버튼 설정
                                 $('#updateSpan').html(`<button type="submit" class="btn btn-warning">수정</button>`);
@@ -466,15 +479,24 @@
 
                                             <div><span style="font-weight: bold;"> 판매자 ID : </span><span
                                                     id="realUser_id" name="user_id"></span></div>
-                                            <div><span style="font-weight: bold;"> 주소 : </span><span id="realAddress"
-                                                    name="address"></span><span name="city" id="realCity"></span><span
-                                                    id="realApartment" name="apartment"></span></div>
+                                            <p></p>
+                                            <div>
+                                                <span style="font-weight: bold;"> 주소 : </span>
+                                                <span id="realAddress" name="address"></span>
+                                                <span id="hidrealAddress"></span>
+                                                <span name="city" id="realCity"></span>
+                                                <span id="hidrealCity"></span>
+                                                <span id="realApartment" name="apartment"></span>
+                                                <span id="hidrealApartment"></span>
+                                            </div>
                                             <div><span style="font-weight: bold;"> 면적 : </span><span
                                                     id="realArea"></span>평</div>
                                             <div><span style="font-weight: bold;"> 매매 가격 : </span><span
-                                                    id="realselling_price" name="selling_price"></span></div>
+                                                    id="realselling_price" name="selling_price"></span>원
+                                            </div>
                                             <div><span style="font-weight: bold;"> 전세 가격 : </span><span
-                                                    id="realJeonse_price"></span></div>
+                                                    id="realJeonse_price"></span>원</div>
+                                            <p></p>
                                             <div id="map" style="width:100%; height:500px; border: solid 1px;"></div>
                                             <div id="imageContainer">
                                                 <span id="realImg" name="imagepath"></span>

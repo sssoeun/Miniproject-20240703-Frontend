@@ -147,9 +147,23 @@ router.post('/edit', async function (req, res) {
         const data = await response.json();
         const csrfToken = req.csrfToken();
         if (response.ok) {
-            return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
+            req.session.realEstateData = {
+                user: req.session.user,
+                totalPages: data.totalPages,
+                currentPage: data.currentPage,
+                data: data,
+                csrfToken: req.csrfToken(),
+            };
+
+            return res.redirect('/real-estate?page=1&alertMsg=수정 완료');
         } else {
-            return res.render('real-estate/list.ejs', { data, user: req.session.user, csrfToken });
+            return res.render('real-estate/list.ejs', {
+                user: req.session.user,
+                totalPages: data.totalPages,
+                currentPage: data.currentPage,
+                data: data,
+                csrfToken: req.csrfToken()
+            });
         }
     } catch (error) {
         console.error(error);

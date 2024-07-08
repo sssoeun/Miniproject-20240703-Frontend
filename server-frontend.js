@@ -28,19 +28,6 @@ const options = {
 const dotenv = require('dotenv');
 dotenv.config();
 
-// body-parser
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// session
-const { sessionConfig } = require('./utils/session');
-app.use(sessionConfig);
-
-// cookie-parser
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
-
 // node-cache 설정
 const NodeCache = require('node-cache');
 const transactionCache = new NodeCache({ stdTTL: 600, checkperiod: 120 });

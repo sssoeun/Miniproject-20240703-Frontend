@@ -34,7 +34,7 @@ const transactionCache = new NodeCache({ stdTTL: 600, checkperiod: 120 });
 
 // CSRF
 const csrf = require('csurf');
-app.use(csrf());
+app.use(csrf({ ignoreMethods: ['GET', 'POST', 'OPTIONS'] }));
 app.use((req, res, next) => {
     req.transactionCache = transactionCache;
 

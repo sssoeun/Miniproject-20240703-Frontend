@@ -31,7 +31,8 @@ router.get('/search', async function (req, res) {
         const data = await response.json();
         console.log(data);
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
-        return res.render('real-estate/list.ejs', { data, user: req.session.user });
+        const csrfToken = req.csrfToken();
+        return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -43,6 +44,10 @@ router.get('/search', async function (req, res) {
 
 // 부동산 매물 목록
 router.get('/', async function (req, res) {
+    if (!req.session.user) {
+        return res.render('auth/login.ejs', { csrfToken: req.csrfToken() });
+    }
+    
     try {
         const response = await fetch('http://127.0.0.1:8000/real-estate', {
             method: 'GET',
@@ -54,7 +59,8 @@ router.get('/', async function (req, res) {
         const data = await response.json();
 
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
-        return res.render('real-estate/list.ejs', { data, user: req.session.user });
+        const csrfToken = req.csrfToken();
+        return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -144,10 +150,11 @@ router.post('/edit', async function (req, res) {
         });
 
         const data = await response.json();
+        const csrfToken = req.csrfToken();
         if (response.ok) {
-            return res.render('real-estate/list.ejs', { data, user: req.session.user });
+            return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
         } else {
-            return res.render('real-estate/list.ejs', { data, user: req.session.user });
+            return res.render('real-estate/list.ejs', { user: req.session.user, data, csrfToken });
         }
     } catch (error) {
         console.error(error);

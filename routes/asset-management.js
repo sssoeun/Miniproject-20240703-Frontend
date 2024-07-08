@@ -126,11 +126,9 @@ router.get('/account-balance/:accountNumber', async function (req, res) {
     }
 });
 
-
 // 자산관리 계좌 개설
 router.post('/create', async function (req, res) {
     try {
-        console.log('/amm/create test');
         const response = await fetch('http://127.0.0.1:8000/amm/create', {
             method: 'POST',
             headers: {
@@ -139,6 +137,7 @@ router.post('/create', async function (req, res) {
             },
             body: JSON.stringify({ ...req.body })
         });
+
         const data = await response.json();
         if (response.ok) {
             req.transactionCache.del(req.session.user.userid); // 캐시 초기화
@@ -170,7 +169,7 @@ router.post('/deposit', async function (req, res) {
         });
         const data = await response.json();
         if (response.ok) {
-            req.transactionCache.del(req.session.user.userid); // 캐시 초기화
+            req.transactionCache.del(req.session.user.userid);  // 캐시 초기화
             res.status(201).send(data);
         } else {
             res.status(response.status).send(data);

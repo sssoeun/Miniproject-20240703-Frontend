@@ -4,6 +4,49 @@ const fs = require('fs'); // fs.existsSync와 fs.mkdirSync를 사용하여 경�
 const path = require('path');
 
 
+// /real-estate/
+router.post('/', async function (req, res) {
+    return res.status(200).send();
+})
+
+// /real-estate/delete
+router.post('/delete', async function (req, res) {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/real-estate/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(req.body)
+        });
+
+        const data = await response.json();
+        return res.status(200).send(data);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({ alertMsg: '서버 오류' });
+    }
+})
+
+// /real-estate/selling
+router.post('/selling', async function (req, res) {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/real-estate/selling', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(req.body)
+        });
+
+        const data = await response.json();
+        return res.status(200).send(data);
+    } catch (err) {
+        console.error('게시물 수정 실패:', err);
+        return res.status(500).send({ alertMsg: '서버 오류' });
+    }
+})
+
 // 리스트 검색
 router.get('/search', async function (req, res) {
     let req_sword = encodeURIComponent(req.query.sword);

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirectURI = encodeURI(process.env.REDIRECTURI);
+const redirectURI = encodeURI(process.env.REDIRECT_URI);
 
 router.get('/login', async function (req, res) {
   const code = req.query.code;

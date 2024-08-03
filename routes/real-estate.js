@@ -3,7 +3,6 @@ const multer = require('multer');
 const fs = require('fs'); // fs.existsSync와 fs.mkdirSync를 사용하여 경로가 없을 때만 폴더를 생성합니다.
 const path = require('path');
 
-
 // /real-estate/
 router.post('/', async function (req, res) {
     return res.status(200).send();
@@ -66,7 +65,14 @@ router.get('/search', async function (req, res) {
         const data = await response.json();
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
         const csrfToken = req.csrfToken();
-        return res.render('real-estate/list.ejs', { data: data.real_estate, totalPages: data.totalPages, currentPage: data.currentPage, user: req.session.user, csrfToken });
+        return res.render('real-estate/list.ejs', { 
+            data: data.real_estate,
+            totalPages: data.totalPages,
+            currentPage: data.currentPage,
+            user: req.session.user,
+            csrfToken,
+            appkey: process.env.JAVASCRIPT_APPKEY
+        });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -98,7 +104,14 @@ router.get('/', async function (req, res) {
 
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
         const csrfToken = req.csrfToken();
-        return res.render('real-estate/list.ejs', { data: data.real_estate, totalPages: data.totalPages, currentPage: data.currentPage, user: req.session.user, csrfToken });
+        return res.render('real-estate/list.ejs', {
+            data: data.real_estate,
+            totalPages: data.totalPages,
+            currentPage: data.currentPage,
+            user: req.session.user,
+            csrfToken,
+            appkey: process.env.JAVASCRIPT_APPKEY
+        });
     } catch (error) {
         console.error(error);
         // 오류 처리
@@ -205,7 +218,8 @@ router.post('/edit', async function (req, res) {
                 totalPages: data.totalPages,
                 currentPage: data.currentPage,
                 data: data,
-                csrfToken: req.csrfToken()
+                csrfToken: req.csrfToken(),
+                appkey: process.env.JAVASCRIPT_APPKEY
             });
         }
     } catch (error) {

@@ -68,9 +68,9 @@ router.get('/login', async function (req, res) {
               }
 
               const token = jwt.sign({ userid: userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
-              req.session.user = { userid: userid, token };
+              req.session.user = { userid: userid, token, nickname: "고객" };
               res.cookie('uid', userid);
-              return res.render('index.ejs', { user: req.session.user});
+              return res.render('index.ejs', { user: req.session.user });
             }
           } catch (err) {
             console.error('Error:', err); // 서버에서 발생한 에러 메시지 출력

@@ -12,7 +12,7 @@ router.post('/', async function (req, res) {
 // /real-estate/delete
 router.post('/delete', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/delete', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:8000/real-estate/delete`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ router.post('/delete', async function (req, res) {
 // /real-estate/selling
 router.post('/selling', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/selling', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:8000/real-estate/selling`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ router.get('/search', async function (req, res) {
     let page = req.query.page || 1;
     let itemsPerPage = req.query.itemsPerPage || 10;
     try {
-        const response = await fetch(`http://127.0.0.1:8000/real-estate/search?selectv=${req_selectv}&sword=${encodeURIComponent(req_sword)}&page=${page}&itemsPerPage=${itemsPerPage}`, {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:8000/real-estate/search?selectv=${req_selectv}&sword=${encodeURIComponent(req_sword)}&page=${page}&itemsPerPage=${itemsPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ router.get('/', async function (req, res) {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/real-estate?page=${page}&itemsPerPage=${itemsPerPage}`, {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:8000/real-estate?page=${page}&itemsPerPage=${itemsPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ router.post('/photo', upload.single('imagepath'), (req, res) => {
 
 router.post('/save', async function (req, res) {
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/save', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:8000/real-estate/save`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -175,7 +175,7 @@ router.post('/save', async function (req, res) {
 router.post('/edit', async function (req, res) {
     imagepath = req.body.imagepath;
     try {
-        const response = await fetch('http://127.0.0.1:8000/real-estate/edit', {
+        const response = await fetch(`http://${process.env.BACKEND_HOST}:8000/real-estate/edit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

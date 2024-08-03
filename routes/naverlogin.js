@@ -43,7 +43,7 @@ router.get('/login', async function (req, res) {
 
           const userid = 'naver-'+profile.id;
           try {
-            const checkUserResponse = await fetch('http://127.0.0.1:8000/naverlogin/checkUser', {
+            const checkUserResponse = await fetch(`http://${process.env.BACKEND_HOST}:8000/naverlogin/checkUser`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ userid: userid })
@@ -57,7 +57,7 @@ router.get('/login', async function (req, res) {
               res.cookie('uid', userid);
               return res.render('index.ejs', { user: req.session.user});
             } else {  // 회원가입
-              const addUserResponse = await fetch('http://127.0.0.1:8000/naverlogin/addUser', {
+              const addUserResponse = await fetch(`http://${process.env.BACKEND_HOST}:8000/naverlogin/addUser`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user })

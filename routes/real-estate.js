@@ -100,7 +100,7 @@ router.get('/', async function (req, res) {
             },
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         // 요청 성공 여부에 따라 렌더링할 데이터와 함께 렌더링
         const csrfToken = req.csrfToken();

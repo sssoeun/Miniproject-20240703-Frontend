@@ -56,8 +56,18 @@ app.use(function (err, req, res, next) {
 });
 
 // Listen
-https.createServer(options, app).listen(process.env.PORT, () => {
-    console.log(`Frontend Server Ready. https://127.0.0.1:${process.env.PORT}`);
+const port = process.env.PORT || 443;
+https.createServer(options, app).listen(port, (err) => {
+    if (err) {
+        console.error('Error starting server:', err);
+        return;
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+        console.log(`Frontend Server Production Ready.`);
+    } else {
+        console.log(`Frontend Server Ready. https://127.0.0.1:${port}`);
+    }
 });
 
 // Routes

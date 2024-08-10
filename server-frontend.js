@@ -68,3 +68,4 @@ app.use('/auth', require('./routes/auth'));
 app.use('/amm', require('./routes/asset-management'));
 app.use('/real-estate', require('./routes/real-estate'));
 app.use('/naverlogin', require('./routes/naverlogin'));
+app.use('/health', require('./routes/health'));
